@@ -1,0 +1,28 @@
+#Membuat CTE terlebih dahulu untuk menyiapkan kolom 'persentase gross laba'
+WITH my_table AS (
+  SELECT product.transaction_id, product.price,
+  CASE WHEN (product.price < 50001) THEN 0.1
+    WHEN (product.price BETWEEN 50001 AND 100000) THEN 0.15 
+  WHEN (product.price BETWEEN 100001 AND 300000) THEN 0.2 
+  WHEN (product.price BETWEEN 300001 AND 500000) THEN 0.25
+  WHEN (product.price > 500001) THEN 0.3
+END gp, FROM kimia_farma.kf_final_transaction product
+)
+
+#Membuat tabel hasil agregasi 4 tabel yang telah diimport
+
+#Membuat kolom nett_sales & nett_profit dengan 'equation'dan dilanjutkan dengan penamaan kolom alias menggunakan 'AS'
+#Serta penggunaan syntax 'CAST' untuk mengubah hasil equation 2 tabel tersebut menjadi bertipe INT
+SELECT ft.transaction_id, ft.Date AS date, ft.branch_id,kantor.branch_name, kantor.kota, kantor.provinsi, kantor.rating AS rating_cabang, ft.customer_name,product.product_id, product.product_name, product.price AS actual_price, ft.discount_percentage, cte.gp AS persentase_gross_laba,
+CAST(((product.price*(1+cte.gp))*(1-ft.discount_percentage))as INT) AS nett_sales, 
+CAST((((product.price*(1+cte.gp))*(1-ft.discount_percentage)) - product.price)as INT) AS nett_profit,
+ft.rating AS rating_transaksi
+
+#Melakukan left join dari kolom yang mengandung 'id'
+FROM `rakamin-kf-analytics-418809.kimia_farma.kf_final_transaction` ft
+LEFT JOIN `rakamin-kf-analytics-418809.kimia_farma.kf_kantor_cabang` kantor
+ON ft.branch_id = kantor.branch_id
+LEFT JOIN `rakamin-kf-analytics-418809.kimia_farma.kf_product` product
+ON ft.product_id = product.product_id
+LEFT JOIN my_table cte
+ON ft.transaction_id = cte.transaction_id
