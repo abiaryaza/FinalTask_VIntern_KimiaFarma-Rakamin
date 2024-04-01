@@ -1,6 +1,7 @@
 # FinalTask_VIntern_KimiaFarma-Rakamin
 ## Membuat Project baru pada Bigquery
 ![image](https://github.com/abiaryaza/FinalTask_VIntern_KimiaFarma-Rakamin/assets/82724914/a85df8f7-8c5c-4f3d-acc0-e69d8968a0d1)
+
 Melakukan pembuatan project dengan nama 'Rakamin-KF-Analytics'
 ## Import dataset
 ![image](https://github.com/abiaryaza/FinalTask_VIntern_KimiaFarma-Rakamin/assets/82724914/c6bb1433-d909-442c-b351-f00e94443830)
